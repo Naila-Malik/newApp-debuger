@@ -18,7 +18,7 @@ import {
 const Stack = createStackNavigator();
 
 const App = () => {
-  // const {user} = useContext(ContextValue);
+  const {user} = useContext(ContextValue);
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -26,18 +26,25 @@ const App = () => {
   return (
     <ContextProvider>
       <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Login"
-          screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Home" component={BottomTab} />
-          <Stack.Screen name="Contact" component={Contact} />
-          <Stack.Screen name="Drawer" component={SideBar} />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{title: 'Login'}}
-          />
-        </Stack.Navigator>
+        {user ? (
+          <Stack.Navigator
+            initialRouteName="Login"
+            screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Home" component={BottomTab} />
+            <Stack.Screen name="Contact" component={Contact} />
+            <Stack.Screen name="Drawer" component={SideBar} />
+          </Stack.Navigator>
+        ) : (
+          <Stack.Navigator
+            initialRouteName="Login"
+            screenOptions={{headerShown: false}}>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{title: 'Login'}}
+            />
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     </ContextProvider>
   );

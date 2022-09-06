@@ -1,14 +1,19 @@
-import React, {createContext, useReducer} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {createContext, useEffect, useReducer} from 'react';
 import Reducer from './Reducer';
 
 const INITIAL_STATE = {
-  user: null,
+  user: JSON.stringify(AsyncStorage.getItem('user')) || null,
   error: false,
 };
 export const ContextValue = createContext(INITIAL_STATE);
 
 export const ContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(Reducer, INITIAL_STATE);
+
+  useEffect(() => {
+    AsyncStorage.setItem('user', JSON.stringify(state.user));
+  }, [state.user]);
   return (
     <ContextValue.Provider
       value={{

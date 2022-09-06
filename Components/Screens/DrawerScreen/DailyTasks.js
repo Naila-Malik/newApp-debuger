@@ -7,29 +7,63 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchBar from 'react-native-dynamic-search-bar';
-import {FlatList} from 'react-native-gesture-handler';
 import DatePicker from 'react-native-date-picker';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 
-export default function DailyTasks() {
+export default function DailyTasks({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDetail, setTaskDetail] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  const [valuePicker, setValuePicker] = useState('Timesheet');
 
   const [time, setTime] = useState(null);
 
-  const taskSubmitHandler = text => {
-    // console.log(' Task details', taskTitle);
+  var taskData = {
+    title: taskTitle,
+    description: taskDetail,
+    // selectProject: valuePicker,
+    date: date,
+  };
+  const taskSubmitHandler = async () => {
+    try {
+      const res = await axios.post(
+        'http://192.168.5.24:5000/tasks/addtask',
+        taskData,
+      );
+      // console.log(' responce of tasks', res);
+
+      res && setModalVisible(!modalVisible);
+      navigation.navigate('DailyTasks');
+    } catch (error) {
+      console.log(' Errors while adding tasks', error);
+    }
   };
 
+  const getTasksDetails = async () => {
+    try {
+      const res = await axios.get('http://192.168.5.24:5000/tasks/alltasks');
+
+      // console.log(' Getting tasks', res.data.get);
+      res && setTasks(res.data.get);
+      // console.log(' List of tasks ', res.data.get);
+    } catch (error) {
+      console.log('Errors while getting tasks', error);
+    }
+  };
+  useEffect(() => {
+    getTasksDetails();
+  }, []);
   return (
     <SafeAreaView>
       {/* Start of Modal */}
@@ -45,6 +79,17 @@ export default function DailyTasks() {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalTitleText}>Add Task</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{fontWeight: 'bold'}}>Select Project</Text>
+                <Picker
+                  style={styles.picker}
+                  selectedValue={valuePicker}
+                  onValueChange={value => setValuePicker(value)}>
+                  <Picker.Item label="Timesheet" value="Timesheet" />
+                  <Picker.Item label="Task" value="Task" />
+                  <Picker.Item label="Attendance" value="Attendance" />
+                </Picker>
+              </View>
               <View style={{flexDirection: 'row'}}>
                 <Text
                   style={[
@@ -80,11 +125,13 @@ export default function DailyTasks() {
                 onConfirm={date => {
                   setOpen(false);
                   setDate(date);
+                  // console.log(' date picker', date);
                 }}
                 onCancel={() => {
                   setOpen(false);
                 }}
               />
+
               <TextInput
                 style={styles.input}
                 value={taskTitle}
@@ -188,14 +235,18 @@ export default function DailyTasks() {
         onPress={() => setModalVisible(true)}>
         <Text> Add User's Tasks </Text>
       </Pressable>
-      <View>
-        <Text> Date</Text>
-        <Text> {date.toUTCString()} </Text>
-        <Text> Tasks </Text>
-        <Text> Start Time </Text>
-        <Text> End Time </Text>
-        <Text> Details </Text>
-      </View>
+
+      {tasks.map((d, i) => {
+        return (
+          <View key={i}>
+            <View style={{marginBottom: 10, marginLeft: 10}}>
+              <Text style={{fontWeight: 'bold'}}>{d.title} </Text>
+              <Text>{d.description} </Text>
+              <Text>{d.date} </Text>
+            </View>
+          </View>
+        );
+      })}
     </SafeAreaView>
   );
 }
@@ -246,6 +297,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 20,
+    marginTop: -20,
   },
   modalText: {
     fontSize: 10,
@@ -266,5 +318,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: '20%',
     padding: 20,
+  },
+  picker: {
+    width: 200,
+    height: 30,
+    borderColor: '#CCD1D1',
+    borderWidth: 1,
+    marginTop: -15,
   },
 });

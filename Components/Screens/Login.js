@@ -2,7 +2,6 @@ import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ContextValue} from '../ContextAPI/ContextCreate';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({navigation}) {
   // const usernameRef = useRef();
@@ -32,20 +31,13 @@ export default function Login({navigation}) {
       dispatch({type: 'LOGIN_SUCCESS', payload: response.data});
       // console.log(' Data received in payload', response.data);
       response && navigation.navigate('Home');
-
-      try {
-        const data = JSON.stringify(response);
-        await AsyncStorage.setItem('userData', data);
-      } catch (error) {
-        console.log('Error in AsyncStorage', error);
-      }
     } catch (error) {
       dispatch({type: 'LOGIN_FAILURE'});
     }
   };
 
   const nameValidator = () => {
-    let rjxName = /^[A-Za-z]/;
+    let rjxName = /^[a-zA-Z]+$/;
     let isValidate = rjxName.test(username);
     // console.warn(isValidate);
     if (username == '') {
@@ -65,16 +57,7 @@ export default function Login({navigation}) {
       setPasswordError('');
     }
   };
-
-  // const getAsyncStorageData = () => {
-  //   try {
-  //     AsyncStorage.getItem('userData').then(value =>
-  //       console.log(' Value of Async', value),
-  //     );
-  //   } catch (error) {
-  //     console.log(' Error in getting data from Async', error);
-  //   }
-  // };
+  // console.log('User will be ', user);
   return (
     <View style={styles.container}>
       <Text style={styles.textheader}> Login</Text>
@@ -105,11 +88,6 @@ export default function Login({navigation}) {
       <View style={{marginTop: 50, width: '50%'}}>
         <Button color="#ebab64" title="Login" onPress={postData} />
       </View>
-      {/* <Button
-        color="#ebab64"
-        title="GetDatafromAsyncStorage"
-        onPress={getAsyncStorageData}
-      /> */}
     </View>
   );
 }

@@ -20,7 +20,7 @@ export default function SideBar() {
       <Drawer.Screen
         name="DailyTasks"
         component={DailyTasks}
-        options={{drawerLabel: 'Daily Tasks', headerShown: false}}
+        options={{drawerLabel: 'DailyTasks', headerShown: false}}
       />
       <Drawer.Screen
         name="Projects"
