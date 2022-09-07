@@ -1,5 +1,6 @@
 import {
   Alert,
+  Button,
   Modal,
   Pressable,
   StyleSheet,
@@ -15,12 +16,13 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function DailyTasks({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-
+  const [details, setDetails] = useState([]);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDetail, setTaskDetail] = useState('');
   const [tasks, setTasks] = useState([]);
@@ -28,6 +30,8 @@ export default function DailyTasks({navigation}) {
   const [valuePicker, setValuePicker] = useState('Timesheet');
 
   const [time, setTime] = useState(null);
+
+  const [isVisible, setVisible] = useState(false);
 
   var taskData = {
     title: taskTitle,
@@ -61,19 +65,24 @@ export default function DailyTasks({navigation}) {
       console.log('Errors while getting tasks', error);
     }
   };
+
+  const toggleModal = () => {
+    setVisible(!isVisible);
+  };
+
   useEffect(() => {
     getTasksDetails();
   }, []);
+
   return (
     <SafeAreaView>
-      {/* Start of Modal */}
+      {/* Start of Modal add task */}
       <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
             setModalVisible(!modalVisible);
           }}>
           <View style={styles.centeredView}>
@@ -209,7 +218,7 @@ export default function DailyTasks({navigation}) {
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
                 <Text style={styles.textStyle} onPress={taskSubmitHandler}>
-                  Hide Modal/ Save Data
+                  Save
                 </Text>
               </Pressable>
             </View>
@@ -217,6 +226,7 @@ export default function DailyTasks({navigation}) {
         </Modal>
       </View>
       {/* End of Modal */}
+
       {/* Start of Component Daily Task's UI */}
 
       <View style={styles.headingContainer}>
@@ -236,17 +246,52 @@ export default function DailyTasks({navigation}) {
         <Text> Add User's Tasks </Text>
       </Pressable>
 
-      {tasks.map((d, i) => {
-        return (
-          <View key={i}>
-            <View style={{marginBottom: 10, marginLeft: 10}}>
-              <Text style={{fontWeight: 'bold'}}>{d.title} </Text>
-              <Text>{d.description} </Text>
-              <Text>{d.date} </Text>
+      <View>
+        {tasks.map((d, i) => {
+          return (
+            <View key={i}>
+              <View style={{marginBottom: 10, marginLeft: 10}}>
+                <Pressable
+                  onPress={() => {
+                    setDetails(d);
+                    setVisible(true);
+                  }}>
+                  <Text style={{fontWeight: 'bold'}}>{d.title} </Text>
+                  <Text>{d.description} </Text>
+                  <Text>{d.date} </Text>
+                </Pressable>
+              </View>
             </View>
-          </View>
-        );
-      })}
+          );
+        })}
+      </View>
+      {/* Modal View for task details */}
+      {isVisible && (
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            isVisible={modalVisible}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalTitleText}>Task Details</Text>
+                <View style={{marginBottom: 10, marginLeft: 10}}>
+                  <Text style={{fontWeight: 'bold'}}>{details.title} </Text>
+                  <Text>{details.description} </Text>
+                  <Text>{details.date} </Text>
+                </View>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setVisible(!isVisible)}>
+                  <Text style={styles.textStyle} onPress={toggleModal}>
+                    Close
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
