@@ -1,4 +1,5 @@
 import {
+  Image,
   Modal,
   Pressable,
   StyleSheet,
@@ -8,37 +9,49 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import Foundation from 'react-native-vector-icons/Foundation';
 import SearchBar from 'react-native-dynamic-search-bar';
+import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
 import axios from 'axios';
-import {FlatList} from 'react-native-gesture-handler';
-import {Picker} from '@react-native-picker/picker';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function Projects({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [details, setDetails] = useState([]);
   const [projectName, setProjectName] = useState('');
+  const [projectManager, setProjectManager] = useState('');
   const [projectDetail, setProjectDetail] = useState('');
+  const [workingDays, setWorkingDays] = useState('');
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
 
-  const [valuePicker, setValuePicker] = useState();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+
   const [userId, setuserId] = useState();
 
   const [isVisible, setVisible] = useState(false);
 
+  const startdate = moment(details.projectStartDate).format('DD/MM/YYYY');
+  const enddate = moment(details.projectStartDate).format('DD/MM/YYYY');
+
   var projectData = {
     projectname: projectName,
     description: projectDetail,
-    assignTo: userId,
+    projectStartDate: startDate,
+    projectEndDate: endDate,
+    allocatedWorkingDays: workingDays,
+    projectmanager: projectManager,
   };
+
   const projectSubmitHandler = async () => {
     try {
       const res = await axios.post(
-        'http://192.168.5.24:5000/projects/addproject',
+        'http://192.168.5.5:5000/projects/addproject',
         projectData,
       );
-      console.log(' responce of projects', res);
+      // console.log(' responce of projects', res);
       res && setModalVisible(!modalVisible);
       navigation.navigate('Projects');
     } catch (error) {
@@ -49,7 +62,7 @@ export default function Projects({navigation}) {
   const getProjectDetails = async () => {
     try {
       const res = await axios.get(
-        'http://192.168.5.24:5000/projects/allprojects',
+        'http://192.168.5.5:5000/projects/allprojects',
       );
 
       res && setProjects(res.data.get);
@@ -64,20 +77,21 @@ export default function Projects({navigation}) {
 
   useEffect(() => {
     getProjectDetails();
-    getUsers();
+    // getUsers();
   }, []);
 
   // for User data
-  const getUsers = async () => {
-    try {
-      const res = await axios.get('http://192.168.5.24:5000/users/allusers');
-      // console.log(' Data from users', res.data.users);
-      res && setUsers(res.data.users);
-    } catch (error) {
-      console.log(' Errors while getting data of users', error);
-    }
-  };
-  console.log(' User data will be as', users);
+  // const getUsers = async () => {
+  //   try {
+  //     const res = await axios.get('http://192.168.5.24:5000/users/allusers');
+  //     // console.log(' Data from users', res.data.users);
+  //     res && setUsers(res.data.users);
+  //   } catch (error) {
+  //     console.log(' Errors while getting data of users', error);
+  //   }
+  // };
+
+  // console.log(' Details of user project will be as', details);
   return (
     <SafeAreaView>
       {/* Start of Modal add project */}
@@ -93,10 +107,107 @@ export default function Projects({navigation}) {
             <View style={styles.modalView}>
               <Text style={styles.modalTitleText}>Add another Project</Text>
               <TextInput
-                style={styles.input}
+                style={styles.inputData}
                 value={projectName}
                 placeholder="Project name"
                 onChangeText={text => setProjectName(text)}
+              />
+              <TextInput
+                style={styles.inputData}
+                value={projectManager}
+                placeholder="Project Manager"
+                onChangeText={text => setProjectManager(text)}
+              />
+              <View>
+                <View style={{flexDirection: 'row', marginBottom: 5}}>
+                  <Text
+                    style={[
+                      styles.modalText,
+                      {fontWeight: 'bold', marginRight: 10},
+                    ]}>
+                    Start Date :
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      borderColor: '#CCD1D1',
+                      borderWidth: 1,
+                      borderRadius: 2,
+                      paddingHorizontal: 10,
+                      marginLeft: 42,
+                    }}>
+                    <Text style={styles.modalText}>
+                      {' '}
+                      {startDate.toLocaleDateString()}
+                      {'     '}
+                    </Text>
+                    <Foundation
+                      name="calendar"
+                      size={18}
+                      onPress={() => setOpen(true)}
+                    />
+                    <DatePicker
+                      modal
+                      open={open}
+                      date={startDate}
+                      onConfirm={date => {
+                        setOpen(false);
+                        setStartDate(date);
+                        // console.log(' date picker', date);
+                      }}
+                      onCancel={() => {
+                        setOpen(false);
+                      }}
+                    />
+                  </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <Text
+                    style={[
+                      styles.modalText,
+                      {fontWeight: 'bold', marginRight: 10},
+                    ]}>
+                    Estimated End Date :
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      borderColor: '#CCD1D1',
+                      borderWidth: 1,
+                      borderRadius: 2,
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={styles.modalText}>
+                      {' '}
+                      {endDate.toLocaleDateString()}
+                      {'     '}
+                    </Text>
+                    <Foundation
+                      name="calendar"
+                      size={18}
+                      onPress={() => setOpen(true)}
+                    />
+                  </View>
+                  <DatePicker
+                    modal
+                    open={open}
+                    date={endDate}
+                    onConfirm={date => {
+                      setOpen(false);
+                      setEndDate(date);
+                      // console.log(' date picker', date);
+                    }}
+                    onCancel={() => {
+                      setOpen(false);
+                    }}
+                  />
+                </View>
+              </View>
+              <TextInput
+                style={styles.inputData}
+                value={workingDays}
+                placeholder="Allocated working days"
+                onChangeText={text => setWorkingDays(text)}
               />
               <TextInput
                 style={styles.inputText}
@@ -104,35 +215,6 @@ export default function Projects({navigation}) {
                 placeholder="Project Description"
                 onChangeText={text => setProjectDetail(text)}
               />
-              <View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text>Select User</Text>
-                  <Picker
-                    style={styles.picker}
-                    selectedValue={valuePicker}
-                    onValueChange={value => setValuePicker(value)}>
-                    {users.map((d, i) => {
-                      return (
-                        <View key={i}>
-                          {/* {console.log(' Msg will be')} */}
-                          <Picker.Item label={d.username} value={d.username} />
-                          {/* {setuserId(d)} */}
-                          {/* {console.log(' Msg Here', d.username)} */}
-                        </View>
-                      );
-                    })}
-                  </Picker>
-                </View>
-              </View>
-
-              {/* <FlatList
-                      data={users}
-                      keyExtractor={d => d._id}
-                      renderItem={({item}) => {
-                        <Text>{item.username} </Text>;
-                        console.log(' data in item', item.username);
-                      }}
-                    /> */}
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
@@ -146,7 +228,7 @@ export default function Projects({navigation}) {
       </View>
       {/* End of Modal */}
 
-      {/* Start of Component Daily Project's UI */}
+      {/* Start of Component Project's UI */}
 
       <View style={styles.headingContainer}>
         <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
@@ -164,26 +246,34 @@ export default function Projects({navigation}) {
         onPress={() => setModalVisible(true)}>
         <Text> Add new project </Text>
       </Pressable>
-
-      <View>
-        {projects.map((d, i) => {
-          return (
-            <View key={i}>
-              <View style={{marginBottom: 10, marginLeft: 10}}>
-                <Pressable
-                  onPress={() => {
-                    setDetails(d);
-                    setVisible(true);
-                  }}>
-                  <Text style={{fontWeight: 'bold'}}>{d.title} </Text>
-                  <Text>{d.description} </Text>
-                  <Text>{d.date} </Text>
-                </Pressable>
-              </View>
+      {projects.map((d, i) => {
+        const startdate = moment(d.projectStartDate).format('DD/MM/YYYY');
+        const enddate = moment(d.projectStartDate).format('DD/MM/YYYY');
+        return (
+          <View key={i}>
+            <View
+              style={{
+                marginBottom: 10,
+                marginLeft: 10,
+                borderBottomColor: '#CCD1D1',
+                borderBottomWidth: 1,
+              }}>
+              <Pressable
+                onPress={() => {
+                  setDetails(d);
+                  setVisible(true);
+                }}>
+                <Text style={{fontWeight: 'bold'}}>
+                  Project: {d.projectname}
+                </Text>
+                <Text>Start Date: {startdate}</Text>
+                <Text>End Date: {enddate}</Text>
+                <Text>Description: {d.description}</Text>
+              </Pressable>
             </View>
-          );
-        })}
-      </View>
+          </View>
+        );
+      })}
       {/* Modal View for project details */}
       {isVisible && (
         <View style={styles.centeredView}>
@@ -195,9 +285,25 @@ export default function Projects({navigation}) {
               <View style={styles.modalView}>
                 <Text style={styles.modalTitleText}>Project Details</Text>
                 <View style={{marginBottom: 10, marginLeft: 10}}>
-                  <Text style={{fontWeight: 'bold'}}>{details.title} </Text>
-                  <Text>{details.description} </Text>
-                  <Text>{details.date} </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{fontWeight: 'bold', marginBottom: 10}}>
+                      Project: {details.projectname}{' '}
+                    </Text>
+                    <Image
+                      style={styles.tinyLogo}
+                      source={{
+                        uri: 'https://picsum.photos/200/300',
+                      }}
+                    />
+                  </View>
+                  <Text>Project Manager: {details.projectmanager} </Text>
+                  <Text>Start Date: {startdate} </Text>
+                  <Text>End Date: {enddate} </Text>
+                  <Text>Details: {details.description} </Text>
                 </View>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
@@ -271,8 +377,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 10,
     paddingHorizontal: 70,
-    borderRadius: 10,
+    borderRadius: 5,
     marginBottom: 10,
+  },
+  inputData: {
+    borderColor: '#CCD1D1',
+    borderWidth: 1,
+    marginTop: 10,
+    paddingHorizontal: '40%',
+    borderRadius: 5,
+    marginBottom: 5,
   },
   inputText: {
     marginTop: 2,
@@ -280,7 +394,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#CCD1D1',
     borderRadius: 5,
-    paddingHorizontal: '20%',
+    paddingHorizontal: '40%',
     padding: 20,
   },
   picker: {
@@ -296,5 +410,10 @@ const styles = StyleSheet.create({
     borderColor: '#CCD1D1',
     borderWidth: 1,
     marginTop: -15,
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
   },
 });

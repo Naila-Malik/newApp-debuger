@@ -1,6 +1,4 @@
 import {
-  Alert,
-  Button,
   Modal,
   Pressable,
   StyleSheet,
@@ -16,7 +14,6 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function DailyTasks({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -29,8 +26,6 @@ export default function DailyTasks({navigation}) {
 
   const [valuePicker, setValuePicker] = useState('Timesheet');
 
-  const [time, setTime] = useState(null);
-
   const [isVisible, setVisible] = useState(false);
 
   var taskData = {
@@ -42,7 +37,7 @@ export default function DailyTasks({navigation}) {
   const taskSubmitHandler = async () => {
     try {
       const res = await axios.post(
-        'http://192.168.5.24:5000/tasks/addtask',
+        'http://192.168.5.5:5000/tasks/addtask',
         taskData,
       );
       // console.log(' responce of tasks', res);
@@ -56,7 +51,7 @@ export default function DailyTasks({navigation}) {
 
   const getTasksDetails = async () => {
     try {
-      const res = await axios.get('http://192.168.5.24:5000/tasks/alltasks');
+      const res = await axios.get('http://192.168.5.5:5000/tasks/alltasks');
 
       // console.log(' Getting tasks', res.data.get);
       res && setTasks(res.data.get);
@@ -250,7 +245,13 @@ export default function DailyTasks({navigation}) {
         {tasks.map((d, i) => {
           return (
             <View key={i}>
-              <View style={{marginBottom: 10, marginLeft: 10}}>
+              <View
+                style={{
+                  marginBottom: 10,
+                  marginLeft: 10,
+                  borderBottomColor: '#CCD1D1',
+                  borderBottomWidth: 1,
+                }}>
                 <Pressable
                   onPress={() => {
                     setDetails(d);
