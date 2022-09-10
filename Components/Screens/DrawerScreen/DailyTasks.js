@@ -14,6 +14,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
+import COLORS from '../constants/Colors';
 
 export default function DailyTasks({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -105,7 +106,7 @@ export default function DailyTasks({navigation}) {
                 <View
                   style={{
                     flexDirection: 'row',
-                    borderColor: '#CCD1D1',
+                    borderColor: COLORS.grey,
                     borderWidth: 1,
                     borderRadius: 2,
                     paddingHorizontal: 10,
@@ -160,7 +161,7 @@ export default function DailyTasks({navigation}) {
                 <View
                   style={{
                     flexDirection: 'row',
-                    borderColor: '#CCD1D1',
+                    borderColor: COLORS.grey,
                     borderWidth: 1,
                     borderRadius: 2,
                     paddingHorizontal: 10,
@@ -192,7 +193,7 @@ export default function DailyTasks({navigation}) {
                 <View
                   style={{
                     flexDirection: 'row',
-                    borderColor: '#CCD1D1',
+                    borderColor: COLORS.grey,
                     borderWidth: 1,
                     borderRadius: 2,
                     paddingHorizontal: 10,
@@ -249,7 +250,7 @@ export default function DailyTasks({navigation}) {
                 style={{
                   marginBottom: 10,
                   marginLeft: 10,
-                  borderBottomColor: '#CCD1D1',
+                  borderBottomColor: COLORS.grey,
                   borderBottomWidth: 1,
                 }}>
                 <Pressable
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#ebab64',
+    backgroundColor: COLORS.buttoncolor,
   },
   modalView: {
     margin: 20,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonClose: {
-    backgroundColor: '#ebab64',
+    backgroundColor: COLORS.buttoncolor,
   },
   textStyle: {
     color: 'white',
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   input: {
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: 10,
     paddingHorizontal: 70,
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderRadius: 5,
     paddingHorizontal: '20%',
     padding: 20,
@@ -368,7 +369,7 @@ const styles = StyleSheet.create({
   picker: {
     width: 200,
     height: 30,
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: -15,
   },

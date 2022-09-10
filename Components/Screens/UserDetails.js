@@ -1,14 +1,42 @@
 import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {Dropdown} from 'react-native-element-dropdown';
 import SearchBar from 'react-native-dynamic-search-bar';
+import COLORS from './constants/Colors';
 
 export default function UserDetails({navigation}) {
+  const data = [
+    {label: 'Item 1', value: '1'},
+    {label: 'Item 2', value: '2'},
+    {label: 'Item 3', value: '3'},
+    {label: 'Item 4', value: '4'},
+    {label: 'Item 5', value: '5'},
+    {label: 'Item 6', value: '6'},
+    {label: 'Item 7', value: '7'},
+    {label: 'Item 8', value: '8'},
+  ];
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [timesheetModalVisible, setTimesheetModalVisible] = useState(false);
   const [assignProjectModalVisible, setassignProjectModalVisible] =
     useState(false);
+
+  const renderDropdownLabel = () => {
+    if (value || isFocus) {
+      return (
+        <Text style={[styles.label, isFocus && {color: COLORS.buttoncolor}]}>
+          Projects List
+        </Text>
+      );
+    }
+    return null;
+  };
   return (
     <SafeAreaView>
+      {/* actual UI of user details page */}
       <View style={styles.headingContainer}>
         <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
           Users
@@ -27,7 +55,7 @@ export default function UserDetails({navigation}) {
       </Pressable>
       <Pressable
         style={[styles.button, styles.buttonOpen]}
-        onPress={() => console.log(' Msg')}>
+        onPress={() => setTimesheetModalVisible(!timesheetModalVisible)}>
         <Text style={{fontWeight: 'bold'}}> Employee's Timesheet </Text>
       </Pressable>
 
@@ -54,7 +82,7 @@ export default function UserDetails({navigation}) {
                     style={styles.textStyle}
                     onPress={() => {
                       console.log(' Close');
-                      navigation.navigate('UserDetails');
+                      navigation.navigate('Users');
                     }}>
                     Close
                   </Text>
@@ -87,11 +115,61 @@ export default function UserDetails({navigation}) {
             <View style={styles.modalView}>
               <Text style={styles.modalTitleText}> Assign Project</Text>
               <Text>select the project from the dropdown below: </Text>
+              <View style={styles.container}>
+                {renderDropdownLabel()}
+                <Dropdown
+                  style={[
+                    styles.dropdown,
+                    isFocus && {borderColor: COLORS.buttoncolor},
+                  ]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  data={data}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isFocus ? 'Select project' : '...'}
+                  searchPlaceholder="Search..."
+                  value={value}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={item => {
+                    setValue(item.value);
+                    setIsFocus(false);
+                  }}
+                />
+              </View>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => console.log(' Close the project')}>
+                onPress={() => navigation.navigate('Users')}>
                 <Text style={styles.textStyle}>Save</Text>
               </Pressable>
+            </View>
+          </View>
+        </Modal>
+      </View>
+
+      {/* Modal to check timesheet of user */}
+
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={timesheetModalVisible}
+          onRequestClose={() => {
+            setTimesheetModalVisible(!timesheetModalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTitleText}> Employee Timesheet </Text>
+              <View style={{marginLeft: 2}}>
+                <Text>Date : ---- </Text>
+                <Text>Task: ---- </Text>
+                <Text>Start Date: -- </Text>
+                <Text>End Date: -- </Text>
+              </View>
             </View>
           </View>
         </Modal>
@@ -117,7 +195,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonOpen: {
-    backgroundColor: '#ebab64',
+    backgroundColor: COLORS.buttoncolor,
   },
   modalView: {
     margin: 20,
@@ -135,7 +213,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonClose: {
-    backgroundColor: '#ebab64',
+    backgroundColor: COLORS.buttoncolor,
   },
   textStyle: {
     color: 'white',
@@ -154,7 +232,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   input: {
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: 10,
     paddingHorizontal: 70,
@@ -162,7 +240,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputData: {
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     // width: '50%',
     // marginTop: 10,
@@ -170,23 +248,38 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
-  picker: {
-    width: 200,
-    height: 30,
-    borderColor: '#CCD1D1',
-    borderWidth: 1,
-    marginTop: -15,
+  container: {
+    backgroundColor: 'white',
+    padding: 26,
   },
-  picker: {
-    width: 200,
-    height: 30,
-    borderColor: '#CCD1D1',
-    borderWidth: 1,
-    marginTop: -15,
-  },
-  tinyLogo: {
-    width: 50,
+  dropdown: {
     height: 50,
-    borderRadius: 50,
+    width: 200,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });

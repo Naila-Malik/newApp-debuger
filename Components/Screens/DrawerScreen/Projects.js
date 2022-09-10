@@ -14,6 +14,7 @@ import SearchBar from 'react-native-dynamic-search-bar';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import axios from 'axios';
+import COLORS from '../constants/Colors';
 
 export default function Projects({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -130,7 +131,7 @@ export default function Projects({navigation}) {
                   <View
                     style={{
                       flexDirection: 'row',
-                      borderColor: '#CCD1D1',
+                      borderColor: COLORS.grey,
                       borderWidth: 1,
                       borderRadius: 2,
                       paddingHorizontal: 10,
@@ -172,7 +173,7 @@ export default function Projects({navigation}) {
                   <View
                     style={{
                       flexDirection: 'row',
-                      borderColor: '#CCD1D1',
+                      borderColor: COLORS.grey,
                       borderWidth: 1,
                       borderRadius: 2,
                       paddingHorizontal: 10,
@@ -255,7 +256,7 @@ export default function Projects({navigation}) {
               style={{
                 marginBottom: 10,
                 marginLeft: 10,
-                borderBottomColor: '#CCD1D1',
+                borderBottomColor: COLORS.grey,
                 borderBottomWidth: 1,
               }}>
               <Pressable
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#ebab64',
+    backgroundColor: COLORS.buttoncolor,
   },
   modalView: {
     margin: 20,
@@ -355,7 +356,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonClose: {
-    backgroundColor: '#ebab64',
+    backgroundColor: COLORS.buttoncolor,
   },
   textStyle: {
     color: 'white',
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   input: {
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: 10,
     paddingHorizontal: 70,
@@ -381,7 +382,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputData: {
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: 10,
     paddingHorizontal: '40%',
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderRadius: 5,
     paddingHorizontal: '40%',
     padding: 20,
@@ -400,14 +401,14 @@ const styles = StyleSheet.create({
   picker: {
     width: 200,
     height: 30,
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: -15,
   },
   picker: {
     width: 200,
     height: 30,
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: -15,
   },

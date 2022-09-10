@@ -10,6 +10,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchBar from 'react-native-dynamic-search-bar';
 import axios from 'axios';
+import COLORS from '../constants/Colors';
 
 export default function Users({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -138,7 +139,7 @@ export default function Users({navigation}) {
               style={{
                 marginBottom: 10,
                 marginLeft: 10,
-                borderBottomColor: '#CCD1D1',
+                borderBottomColor: COLORS.grey,
                 borderBottomWidth: 1,
               }}>
               <Pressable
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#ebab64',
+    backgroundColor: COLORS.buttoncolor,
   },
   modalView: {
     margin: 20,
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonClose: {
-    backgroundColor: '#ebab64',
+    backgroundColor: COLORS.buttoncolor,
   },
   textStyle: {
     color: 'white',
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   input: {
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: 10,
     paddingHorizontal: 70,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputData: {
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     // width: '50%',
     // marginTop: 10,
@@ -228,14 +229,14 @@ const styles = StyleSheet.create({
   picker: {
     width: 200,
     height: 30,
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: -15,
   },
   picker: {
     width: 200,
     height: 30,
-    borderColor: '#CCD1D1',
+    borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: -15,
   },

@@ -1,4 +1,4 @@
-import {Button, StyleSheet} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 // import 'react-native-gesture-handler';
