@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 
 import SplashScreen from 'react-native-splash-screen';
+import {Provider as PaperProvider} from 'react-native-paper';
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -23,29 +24,32 @@ const App = () => {
     SplashScreen.hide();
   }, []);
   // console.log('Routes Component', ContextValue.user);
+
   return (
     <ContextProvider>
-      <NavigationContainer>
-        {user ? (
-          <Stack.Navigator
-            initialRouteName="Login"
-            screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Home" component={BottomTab} />
-            <Stack.Screen name="Contact" component={Contact} />
-            <Stack.Screen name="Drawer" component={SideBar} />
-          </Stack.Navigator>
-        ) : (
-          <Stack.Navigator
-            initialRouteName="Login"
-            screenOptions={{headerShown: false}}>
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{title: 'Login'}}
-            />
-          </Stack.Navigator>
-        )}
-      </NavigationContainer>
+      <PaperProvider>
+        <NavigationContainer>
+          {user ? (
+            <Stack.Navigator
+              initialRouteName="Login"
+              screenOptions={{headerShown: false}}>
+              <Stack.Screen name="Home" component={BottomTab} />
+              <Stack.Screen name="Contact" component={Contact} />
+              <Stack.Screen name="Drawer" component={SideBar} />
+            </Stack.Navigator>
+          ) : (
+            <Stack.Navigator
+              initialRouteName="Login"
+              screenOptions={{headerShown: false}}>
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{title: 'Login'}}
+              />
+            </Stack.Navigator>
+          )}
+        </NavigationContainer>
+      </PaperProvider>
     </ContextProvider>
   );
 };

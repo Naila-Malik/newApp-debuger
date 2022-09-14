@@ -1,4 +1,4 @@
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -10,7 +10,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import COLORS from './constants/Colors';
 
 const Tab = createBottomTabNavigator();
-const image = require('./images/background.jpg');
+// const image = require('./images/background.jpg');
+const image = require('./images/avatar.png');
 export default function Home({navigation}) {
   return (
     <View style={styles.maincontainer}>
@@ -28,79 +29,82 @@ export default function Home({navigation}) {
           onPress={() => console.log(' Search itmes')}
         />
       </View>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <View style={styles.textcontainer}>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              fontSize: 30,
-              color: COLORS.buttoncolor,
-            }}>
-            {' '}
-            Services
-          </Text>
+      {/* <ImageBackground source={image} resizeMode="cover" style={styles.image}> */}
+      <View style={styles.textcontainer}>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 30,
+            color: COLORS.buttoncolor,
+          }}>
+          {' '}
+          Services
+        </Text>
+        <View style={styles.avatarContainer}>
+          <Image source={image} style={styles.avatar} />
         </View>
-        <View style={styles.uiOuterContainer}>
-          <View style={styles.uiInnerContainer}>
-            <AntDesign
-              name="dashboard"
-              size={60}
-              color={COLORS.buttoncolor}
-              style={styles.iconstyle}
-            />
-            <Text style={styles.iconText}>Set Timesheet</Text>
-          </View>
-          <View style={styles.uiInnerContainer}>
-            <FontAwesome
-              name="group"
-              size={50}
-              style={styles.iconstyle}
-              color={COLORS.buttoncolor}
-            />
-            <Text style={styles.iconText}>Add new user</Text>
-          </View>
+      </View>
+      <View style={styles.uiOuterContainer}>
+        <View style={styles.uiInnerContainer}>
+          <AntDesign
+            name="dashboard"
+            size={60}
+            color={COLORS.buttoncolor}
+            style={styles.iconstyle}
+          />
+          <Text style={styles.iconText}>Set Timesheet</Text>
         </View>
-        <View style={styles.uiOuterContainer}>
-          <View style={styles.uiInnerContainer}>
-            <FontAwesome5
-              name="tasks"
-              size={60}
-              color={COLORS.buttoncolor}
-              style={styles.iconstyle}
-            />
-            <Text style={styles.iconText}>New Task</Text>
-          </View>
-          <View style={styles.uiInnerContainer}>
-            <AntDesign
-              name="profile"
-              size={50}
-              style={styles.iconstyle}
-              color={COLORS.buttoncolor}
-            />
-            <Text style={styles.iconText}>New Project</Text>
-          </View>
+        <View style={styles.uiInnerContainer}>
+          <FontAwesome
+            name="group"
+            size={50}
+            style={styles.iconstyle}
+            color={COLORS.buttoncolor}
+          />
+          <Text style={styles.iconText}>Add new user</Text>
         </View>
-        <View style={styles.uiOuterContainer}>
-          <View style={styles.uiInnerContainer}>
-            <Feather
-              name="file-text"
-              size={60}
-              color={COLORS.buttoncolor}
-              style={styles.iconstyle}
-            />
-            <Text style={styles.iconText}>Leave Types</Text>
-          </View>
-          <View style={styles.uiInnerContainer}>
-            <MaterialCommunityIcons
-              name="bell-check-outline"
-              size={50}
-              style={styles.iconstyle}
-              color={COLORS.buttoncolor}
-            />
-            <Text style={styles.iconText}>Notifications</Text>
-          </View>
+      </View>
+      <View style={styles.uiOuterContainer}>
+        <View style={styles.uiInnerContainer}>
+          <FontAwesome5
+            name="tasks"
+            size={60}
+            color={COLORS.buttoncolor}
+            style={styles.iconstyle}
+          />
+          <Text style={styles.iconText}>New Task</Text>
         </View>
-      </ImageBackground>
+        <View style={styles.uiInnerContainer}>
+          <AntDesign
+            name="profile"
+            size={50}
+            style={styles.iconstyle}
+            color={COLORS.buttoncolor}
+          />
+          <Text style={styles.iconText}>New Project</Text>
+        </View>
+      </View>
+      <View style={styles.uiOuterContainer}>
+        <View style={styles.uiInnerContainer}>
+          <Feather
+            name="file-text"
+            size={60}
+            color={COLORS.buttoncolor}
+            style={styles.iconstyle}
+          />
+          <Text style={styles.iconText}>Leave Types</Text>
+        </View>
+        <View style={styles.uiInnerContainer}>
+          <MaterialCommunityIcons
+            name="bell-check-outline"
+            size={50}
+            style={styles.iconstyle}
+            color={COLORS.buttoncolor}
+          />
+          <Text style={styles.iconText}>Notifications</Text>
+        </View>
+      </View>
+      {/* </ImageBackground> */}
     </View>
   );
 }
@@ -108,11 +112,20 @@ export default function Home({navigation}) {
 const styles = StyleSheet.create({
   maincontainer: {
     flex: 1,
+    flexDirection: 'column',
   },
-  image: {
-    flex: 1,
-    justifyContent: 'center',
-    opacity: 0.6,
+  avatar: {
+    height: 30,
+    width: 30,
+    borderRadius: 30,
+    marginLeft: '10%',
+  },
+  avatarContainer: {
+    height: 40,
+    width: 40,
+    borderRadius: 30,
+    borderWidth: 1,
+    marginLeft: '50%',
   },
   container: {
     flexDirection: 'row',
@@ -125,9 +138,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   uiInnerContainer: {
-    height: '40%',
-    width: '50%',
+    height: '50%',
+    width: '45%',
+    padding: 10,
     justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: 20,
+    margin: 6,
   },
   iconstyle: {
     marginLeft: 40,
@@ -138,6 +155,6 @@ const styles = StyleSheet.create({
   },
   textcontainer: {
     flex: 1,
-    borderWidth: 1,
+    flexDirection: 'row',
   },
 });

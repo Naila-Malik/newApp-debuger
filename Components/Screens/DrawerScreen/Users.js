@@ -21,7 +21,7 @@ export default function Users({navigation}) {
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
 
-  const [userId, setuserId] = useState();
+  const [userDetail, setUserDetail] = useState();
 
   const [isVisible, setVisible] = useState(false);
 
@@ -65,6 +65,7 @@ export default function Users({navigation}) {
   }, []);
 
   // console.log(' Users data will be ', users);
+  // console.log(' Data to sent', userDetail);
 
   return (
     <SafeAreaView>
@@ -130,9 +131,18 @@ export default function Users({navigation}) {
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}>
-        <Text> Add new user </Text>
+        <Text
+          style={{
+            color: COLORS.textcolor,
+            textAlign: 'center',
+            fontWeight: 'bold',
+          }}>
+          {' '}
+          Add new user{' '}
+        </Text>
       </Pressable>
       {users.map((d, i) => {
+        // console.log(' i am in map func', d);
         return (
           <View key={i}>
             <View
@@ -145,7 +155,8 @@ export default function Users({navigation}) {
               <Pressable
                 onPress={() => {
                   setVisible(true);
-                  navigation.navigate('UserDetails');
+                  setUserDetail(d);
+                  navigation.navigate('UserDetails', {getdata: userDetail});
                 }}>
                 <Text style={{fontWeight: 'bold'}}> {d.username}</Text>
                 <Text>Role : {d.role}</Text>

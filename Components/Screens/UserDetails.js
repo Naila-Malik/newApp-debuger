@@ -1,23 +1,22 @@
 import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Dropdown} from 'react-native-element-dropdown';
 import SearchBar from 'react-native-dynamic-search-bar';
 import COLORS from './constants/Colors';
+import axios from 'axios';
 
-export default function UserDetails({navigation}) {
-  const data = [
-    {label: 'Item 1', value: '1'},
-    {label: 'Item 2', value: '2'},
-    {label: 'Item 3', value: '3'},
-    {label: 'Item 4', value: '4'},
-    {label: 'Item 5', value: '5'},
-    {label: 'Item 6', value: '6'},
-    {label: 'Item 7', value: '7'},
-    {label: 'Item 8', value: '8'},
-  ];
+export default function UserDetails({route, navigation}) {
+  // const data = projects;
+  // {label: projects.projectname, value: projects.projectname},
+  // {label: projects.description, value: projects.description},
+
+  const {getdata} = route.params;
+
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+
+  const [projects, setProjects] = useState({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [timesheetModalVisible, setTimesheetModalVisible] = useState(false);
@@ -34,6 +33,33 @@ export default function UserDetails({navigation}) {
     }
     return null;
   };
+
+  const getProjectDetails = async () => {
+    try {
+      const res = await axios.get(
+        'http://192.168.5.5:5000/projects/allprojects',
+      );
+      var dummydata = [];
+      const projdata = res.data.get.map(d => {
+        dummydata.push({
+          label: d.projectname,
+          value: d.projectname,
+          // assignTo: d.assignTo,
+        });
+      });
+      // console.log(dummydata);
+      projdata && setProjects(dummydata);
+    } catch (error) {
+      console.log('Errors while getting projects', error);
+    }
+  };
+
+  useEffect(() => {
+    getProjectDetails();
+  }, []);
+
+  console.log('check the value', value);
+
   return (
     <SafeAreaView>
       {/* actual UI of user details page */}
@@ -51,12 +77,30 @@ export default function UserDetails({navigation}) {
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(!modalVisible)}>
-        <Text style={{fontWeight: 'bold'}}> Assigned Projects </Text>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            color: COLORS.textcolor,
+            textAlign: 'center',
+            fontWeight: 'bold',
+          }}>
+          {' '}
+          Assigned Projects{' '}
+        </Text>
       </Pressable>
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setTimesheetModalVisible(!timesheetModalVisible)}>
-        <Text style={{fontWeight: 'bold'}}> Employee's Timesheet </Text>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            color: COLORS.textcolor,
+            textAlign: 'center',
+            fontWeight: 'bold',
+          }}>
+          {' '}
+          Employee's Timesheet{' '}
+        </Text>
       </Pressable>
 
       {/* Modal for view details of assigned projects to employee */}
@@ -72,8 +116,21 @@ export default function UserDetails({navigation}) {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalTitleText}> Project Description</Text>
-              <Text>Project Name </Text>
-              <Text>Description </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                  }}>
+                  Project Name :{' '}
+                </Text>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                  }}>
+                  {value}
+                </Text>
+              </View>
               <View style={{flexDirection: 'row'}}>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
@@ -113,8 +170,10 @@ export default function UserDetails({navigation}) {
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalTitleText}> Assign Project</Text>
-              <Text>select the project from the dropdown below: </Text>
+              <Text style={styles.modalTitleText}> Assign New Project</Text>
+              <Text style={{marginBottom: 5}}>
+                select the project from the dropdown below:{' '}
+              </Text>
               <View style={styles.container}>
                 {renderDropdownLabel()}
                 <Dropdown
@@ -125,7 +184,7 @@ export default function UserDetails({navigation}) {
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
-                  data={data}
+                  data={projects}
                   search
                   maxHeight={300}
                   labelField="label"

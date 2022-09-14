@@ -81,17 +81,6 @@ export default function Projects({navigation}) {
     // getUsers();
   }, []);
 
-  // for User data
-  // const getUsers = async () => {
-  //   try {
-  //     const res = await axios.get('http://192.168.5.24:5000/users/allusers');
-  //     // console.log(' Data from users', res.data.users);
-  //     res && setUsers(res.data.users);
-  //   } catch (error) {
-  //     console.log(' Errors while getting data of users', error);
-  //   }
-  // };
-
   // console.log(' Details of user project will be as', details);
   return (
     <SafeAreaView>
