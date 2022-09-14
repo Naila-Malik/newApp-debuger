@@ -16,7 +16,9 @@ export default function UserDetails({route, navigation}) {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
-  const [projects, setProjects] = useState({});
+  const [projectsList, setProjectsList] = useState({});
+  const [projectsId, setProjectsId] = useState({});
+  const [projectAssigned, setProjectAssigned] = useState({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [timesheetModalVisible, setTimesheetModalVisible] = useState(false);
@@ -39,6 +41,7 @@ export default function UserDetails({route, navigation}) {
       const res = await axios.get(
         'http://192.168.5.5:5000/projects/allprojects',
       );
+      res && setProjectsId(res.data.get);
       var dummydata = [];
       const projdata = res.data.get.map(d => {
         dummydata.push({
@@ -48,7 +51,7 @@ export default function UserDetails({route, navigation}) {
         });
       });
       // console.log(dummydata);
-      projdata && setProjects(dummydata);
+      projdata && setProjectsList(dummydata);
     } catch (error) {
       console.log('Errors while getting projects', error);
     }
@@ -58,13 +61,18 @@ export default function UserDetails({route, navigation}) {
     getProjectDetails();
   }, []);
 
-  console.log('check the value', value);
-
+  // console.log('dropdown value', value);
+  // console.log('Get data from user', getdata._id);
+  // console.log('Get projects list', projectsId);
   return (
     <SafeAreaView>
       {/* actual UI of user details page */}
       <View style={styles.headingContainer}>
-        <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+        <Text
+          style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}
+          onPressOut={() => {
+            setTimesheetModalVisible(false);
+          }}>
           Users
         </Text>
       </View>
@@ -106,13 +114,7 @@ export default function UserDetails({route, navigation}) {
       {/* Modal for view details of assigned projects to employee */}
 
       <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
+        <Modal animationType="slide" transparent={true} visible={modalVisible}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalTitleText}> Project Description</Text>
@@ -132,14 +134,12 @@ export default function UserDetails({route, navigation}) {
                 </Text>
               </View>
               <View style={{flexDirection: 'row'}}>
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}>
+                <Pressable style={[styles.button, styles.buttonClose]}>
                   <Text
                     style={styles.textStyle}
                     onPress={() => {
-                      console.log(' Close');
                       navigation.navigate('Users');
+                      setModalVisible(!modalVisible);
                     }}>
                     Close
                   </Text>
@@ -164,15 +164,12 @@ export default function UserDetails({route, navigation}) {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={assignProjectModalVisible}
-          onRequestClose={() => {
-            setassignProjectModalVisible(!assignProjectModalVisible);
-          }}>
+          visible={assignProjectModalVisible}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalTitleText}> Assign New Project</Text>
               <Text style={{marginBottom: 5}}>
-                select the project from the dropdown below:{' '}
+                Select the project from the dropdown below:{' '}
               </Text>
               <View style={styles.container}>
                 {renderDropdownLabel()}
@@ -184,7 +181,7 @@ export default function UserDetails({route, navigation}) {
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
-                  data={projects}
+                  data={projectsList}
                   search
                   maxHeight={300}
                   labelField="label"
@@ -202,7 +199,10 @@ export default function UserDetails({route, navigation}) {
               </View>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => navigation.navigate('Users')}>
+                onPress={() => {
+                  setassignProjectModalVisible(!assignProjectModalVisible);
+                  navigation.navigate('Users');
+                }}>
                 <Text style={styles.textStyle}>Save</Text>
               </Pressable>
             </View>
@@ -216,10 +216,7 @@ export default function UserDetails({route, navigation}) {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={timesheetModalVisible}
-          onRequestClose={() => {
-            setTimesheetModalVisible(!timesheetModalVisible);
-          }}>
+          visible={timesheetModalVisible}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalTitleText}> Employee Timesheet </Text>
@@ -228,6 +225,13 @@ export default function UserDetails({route, navigation}) {
                 <Text>Task: ---- </Text>
                 <Text>Start Date: -- </Text>
                 <Text>End Date: -- </Text>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() =>
+                    setTimesheetModalVisible(!timesheetModalVisible)
+                  }>
+                  <Text style={styles.textStyle}>Close</Text>
+                </Pressable>
               </View>
             </View>
           </View>

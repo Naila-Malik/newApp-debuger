@@ -239,7 +239,15 @@ export default function DailyTasks({navigation}) {
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}>
-        <Text> Add User's Tasks </Text>
+        <Text
+          style={{
+            color: COLORS.textcolor,
+            textAlign: 'center',
+            fontWeight: 'bold',
+          }}>
+          {' '}
+          Add User's Tasks{' '}
+        </Text>
       </Pressable>
 
       <View>

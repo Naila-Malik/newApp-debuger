@@ -234,7 +234,15 @@ export default function Projects({navigation}) {
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}>
-        <Text> Add new project </Text>
+        <Text
+          style={{
+            color: COLORS.textcolor,
+            textAlign: 'center',
+            fontWeight: 'bold',
+          }}>
+          {' '}
+          Add new project{' '}
+        </Text>
       </Pressable>
       {projects.map((d, i) => {
         const startdate = moment(d.projectStartDate).format('DD/MM/YYYY');
