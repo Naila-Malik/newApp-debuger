@@ -25,7 +25,7 @@ export default function Login({navigation}) {
     dispatch({type: 'LOGIN_START'});
     try {
       const response = await axios.post(
-        'http://192.168.5.24:5000/auth/login',
+        'http://192.168.5.5:5000/auth/login',
         postdata,
       );
       dispatch({type: 'LOGIN_SUCCESS', payload: response.data});

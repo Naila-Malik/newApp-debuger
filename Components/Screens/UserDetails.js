@@ -7,10 +7,6 @@ import COLORS from './constants/Colors';
 import axios from 'axios';
 
 export default function UserDetails({route, navigation}) {
-  // const data = projects;
-  // {label: projects.projectname, value: projects.projectname},
-  // {label: projects.description, value: projects.description},
-
   const {getdata} = route.params;
 
   const [value, setValue] = useState(null);
@@ -18,7 +14,7 @@ export default function UserDetails({route, navigation}) {
 
   const [projectsList, setProjectsList] = useState({});
   const [projectsId, setProjectsId] = useState({});
-  const [projectAssigned, setProjectAssigned] = useState({});
+  // const [projectAssigned, setProjectAssigned] = useState({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [timesheetModalVisible, setTimesheetModalVisible] = useState(false);
@@ -36,25 +32,45 @@ export default function UserDetails({route, navigation}) {
     return null;
   };
 
+  // const assignProj = {
+  //   projectsId =
+  // }
+
   const getProjectDetails = async () => {
     try {
       const res = await axios.get(
         'http://192.168.5.5:5000/projects/allprojects',
       );
-      res && setProjectsId(res.data.get);
+
+      // get data from projects and extract project name only by map method
+      //new array will be generated that have only name of projects
       var dummydata = [];
       const projdata = res.data.get.map(d => {
         dummydata.push({
           label: d.projectname,
           value: d.projectname,
-          // assignTo: d.assignTo,
+          projId: d._id,
         });
       });
-      // console.log(dummydata);
       projdata && setProjectsList(dummydata);
     } catch (error) {
       console.log('Errors while getting projects', error);
     }
+  };
+
+  const assignProject = async () => {
+    console.log(' MSg Here');
+    // console.log('Get user id', getdata._id);
+    // console.log('Get project id', projectsId);
+    // try {
+    //   const res = await axios.put(
+    //     `http://192.168.5.5:5000/projects/assignproject/${projectsId}`,
+    //     {assignTo: getdata._id},
+    //   );
+    //   console.log(' set assigned value to user', res);
+    // } catch (error) {
+    //   console.log(' Error while assigning project', error);
+    // }
   };
 
   useEffect(() => {
@@ -62,8 +78,8 @@ export default function UserDetails({route, navigation}) {
   }, []);
 
   // console.log('dropdown value', value);
-  // console.log('Get data from user', getdata._id);
-  // console.log('Get projects list', projectsId);
+  // console.log('Get user id', getdata._id);
+  // console.log('Get project id', projectsId);
   return (
     <SafeAreaView>
       {/* actual UI of user details page */}
@@ -194,6 +210,7 @@ export default function UserDetails({route, navigation}) {
                   onChange={item => {
                     setValue(item.value);
                     setIsFocus(false);
+                    setProjectsId(item.projId);
                   }}
                 />
               </View>
@@ -202,6 +219,7 @@ export default function UserDetails({route, navigation}) {
                 onPress={() => {
                   setassignProjectModalVisible(!assignProjectModalVisible);
                   navigation.navigate('Users');
+                  assignProject();
                 }}>
                 <Text style={styles.textStyle}>Save</Text>
               </Pressable>
