@@ -153,10 +153,12 @@ export default function Users({navigation}) {
                 borderBottomWidth: 1,
               }}>
               <Pressable
-                onPress={() => {
+                onPress={async () => {
                   setVisible(true);
                   setUserDetail(d);
-                  navigation.navigate('UserDetails', {getdata: userDetail});
+                  await navigation.navigate('UserDetails', {
+                    getdata: userDetail,
+                  });
                 }}>
                 <Text style={{fontWeight: 'bold'}}> {d.username}</Text>
                 <Text>Role : {d.role}</Text>

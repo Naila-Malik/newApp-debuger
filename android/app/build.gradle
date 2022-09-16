@@ -1,5 +1,4 @@
 apply plugin: "com.android.application"
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 import com.android.build.OutputFile
 
@@ -210,16 +209,6 @@ android {
         }
     }
 
-signingConfigs {
-        release {
-            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(MYAPP_UPLOAD_STORE_FILE)
-                storePassword MYAPP_UPLOAD_STORE_PASSWORD
-                keyAlias MYAPP_UPLOAD_KEY_ALIAS
-                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-            }
-        }
-    }
     splits {
         abi {
             reset()
@@ -246,7 +235,6 @@ signingConfigs {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            signingConfig signingConfigs.release
         }
     }
 
@@ -269,10 +257,6 @@ signingConfigs {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-     implementation project(':react-native-splash-screen')
-
-     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

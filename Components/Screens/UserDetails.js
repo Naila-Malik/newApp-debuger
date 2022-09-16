@@ -14,7 +14,7 @@ export default function UserDetails({route, navigation}) {
 
   const [projectsList, setProjectsList] = useState({});
   const [projectsId, setProjectsId] = useState({});
-  // const [projectAssigned, setProjectAssigned] = useState({});
+  const [projectAssigned, setProjectAssigned] = useState({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [timesheetModalVisible, setTimesheetModalVisible] = useState(false);
@@ -59,18 +59,18 @@ export default function UserDetails({route, navigation}) {
   };
 
   const assignProject = async () => {
-    console.log(' MSg Here');
-    // console.log('Get user id', getdata._id);
-    // console.log('Get project id', projectsId);
-    // try {
-    //   const res = await axios.put(
-    //     `http://192.168.5.5:5000/projects/assignproject/${projectsId}`,
-    //     {assignTo: getdata._id},
-    //   );
-    //   console.log(' set assigned value to user', res);
-    // } catch (error) {
-    //   console.log(' Error while assigning project', error);
-    // }
+    console.log('Get user id', getdata._id);
+    console.log('Get project id', projectsId);
+    try {
+      const res = await axios.put(
+        `http://192.168.5.5:5000/projects/assignproject/${projectsId}`,
+        {assignTo: getdata._id},
+      );
+      console.log('set assigned value to user', res.data.result.projectname);
+      res && setProjectAssigned(res.data.result.projectname);
+    } catch (error) {
+      console.log(' Error while assigning project', error);
+    }
   };
 
   useEffect(() => {
@@ -80,6 +80,7 @@ export default function UserDetails({route, navigation}) {
   // console.log('dropdown value', value);
   // console.log('Get user id', getdata._id);
   // console.log('Get project id', projectsId);
+  console.log('List of Assigned Projects', projectAssigned);
   return (
     <SafeAreaView>
       {/* actual UI of user details page */}
@@ -112,6 +113,7 @@ export default function UserDetails({route, navigation}) {
           Assigned Projects{' '}
         </Text>
       </Pressable>
+      {/* <Text>{projectAssigned}</Text> */}
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setTimesheetModalVisible(!timesheetModalVisible)}>
