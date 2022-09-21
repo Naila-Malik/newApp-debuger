@@ -1,42 +1,77 @@
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
-import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
-// import 'react-native-gesture-handler';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import DailyTasks from './DrawerScreen/DailyTasks';
 import Dashboard from './DrawerScreen/Dashboard';
 import Projects from './DrawerScreen/Projects';
 import Users from './DrawerScreen/Users';
 import UserDetails from './UserDetails';
+import CustomDrawer from './DrawerScreen/CustomDrawer';
+import COLORS from './constants/Colors';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const Drawer = createDrawerNavigator();
 
 export default function SideBar() {
   return (
-    <Drawer.Navigator initialRouteName="Dashboard">
+    <Drawer.Navigator
+      initialRouteName="Dashboard"
+      drawerContent={props => <CustomDrawer {...props} />}
+      screenOptions={{
+        headerShown: false,
+        drawerActiveBackgroundColor: COLORS.buttoncolor,
+        drawerActiveTintColor: COLORS.textcolor,
+        drawerLabelStyle: {
+          marginLeft: -20,
+          color: COLORS.textcolor,
+        },
+      }}>
       <Drawer.Screen
         name="Dashboard"
         component={Dashboard}
-        options={{drawerLabel: 'Dashboard', headerShown: false}}
+        options={{
+          drawerIcon: ({color}) => (
+            <MaterialIcons name="dashboard-customize" size={28} color={color} />
+          ),
+        }}
       />
       <Drawer.Screen
         name="DailyTasks"
         component={DailyTasks}
-        options={{drawerLabel: 'DailyTasks', headerShown: false}}
+        options={{
+          drawerIcon: ({color}) => (
+            <MaterialCommunityIcons
+              name="facebook-workplace"
+              size={28}
+              color={color}
+            />
+          ),
+        }}
       />
       <Drawer.Screen
         name="Projects"
         component={Projects}
-        options={{drawerLabel: 'Projects', headerShown: false}}
+        options={{
+          drawerIcon: ({color}) => (
+            <FontAwesome name="cloud-upload" size={28} color={color} />
+          ),
+        }}
       />
       <Drawer.Screen
         name="Users"
         component={Users}
-        options={{drawerLabel: 'Users', headerShown: false}}
+        options={{
+          drawerIcon: ({color}) => (
+            <FontAwesome name="user" size={28} color={color} />
+          ),
+        }}
       />
       <Drawer.Screen
         name="UserDetails"
         component={UserDetails}
-        options={{drawerLabel: '', headerShown: false}}
+        options={{drawerLabel: ''}}
       />
     </Drawer.Navigator>
   );

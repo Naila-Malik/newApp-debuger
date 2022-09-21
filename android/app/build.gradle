@@ -1,5 +1,4 @@
 apply plugin: "com.android.application"
-
 import com.android.build.OutputFile
 
 /**
@@ -76,6 +75,11 @@ import com.android.build.OutputFile
  *   extraPackagerArgs: []
  * ]
  */
+
+ project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'FontAwesome.ttf', 'MaterialCommunityIcons.ttf', 'Ionicons.ttf'] // Name of the font files you want to copy
+]
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
@@ -257,6 +261,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':react-native-vector-icons')
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

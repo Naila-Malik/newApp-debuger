@@ -2,15 +2,11 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import COLORS from './constants/Colors';
 
 const Tab = createBottomTabNavigator();
-// const image = require('./images/background.jpg');
 const image = require('./images/avatar.png');
 export default function Home({navigation}) {
   return (
@@ -29,7 +25,6 @@ export default function Home({navigation}) {
           onPress={() => console.log(' Search itmes')}
         />
       </View>
-      {/* <ImageBackground source={image} resizeMode="cover" style={styles.image}> */}
       <View style={styles.textcontainer}>
         <Text
           style={{
@@ -46,7 +41,7 @@ export default function Home({navigation}) {
       </View>
       <View style={styles.uiOuterContainer}>
         <View style={styles.uiInnerContainer}>
-          <AntDesign
+          <FontAwesome
             name="dashboard"
             size={60}
             color={COLORS.buttoncolor}
@@ -66,7 +61,7 @@ export default function Home({navigation}) {
       </View>
       <View style={styles.uiOuterContainer}>
         <View style={styles.uiInnerContainer}>
-          <FontAwesome5
+          <FontAwesome
             name="tasks"
             size={60}
             color={COLORS.buttoncolor}
@@ -75,8 +70,8 @@ export default function Home({navigation}) {
           <Text style={styles.iconText}>New Task</Text>
         </View>
         <View style={styles.uiInnerContainer}>
-          <AntDesign
-            name="profile"
+          <MaterialCommunityIcons
+            name="clipboard-list-outline"
             size={50}
             style={styles.iconstyle}
             color={COLORS.buttoncolor}
@@ -86,8 +81,8 @@ export default function Home({navigation}) {
       </View>
       <View style={styles.uiOuterContainer}>
         <View style={styles.uiInnerContainer}>
-          <Feather
-            name="file-text"
+          <MaterialCommunityIcons
+            name="file-cancel-outline"
             size={60}
             color={COLORS.buttoncolor}
             style={styles.iconstyle}
@@ -104,7 +99,6 @@ export default function Home({navigation}) {
           <Text style={styles.iconText}>Notifications</Text>
         </View>
       </View>
-      {/* </ImageBackground> */}
     </View>
   );
 }

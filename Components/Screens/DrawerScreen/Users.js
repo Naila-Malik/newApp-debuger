@@ -18,10 +18,7 @@ export default function Users({navigation}) {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
 
-  const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
-
-  const [userDetail, setUserDetail] = useState();
 
   const [isVisible, setVisible] = useState(false);
 
@@ -55,17 +52,11 @@ export default function Users({navigation}) {
     }
   };
 
-  const toggleModal = () => {
-    setVisible(!isVisible);
-  };
-
   useEffect(() => {
-    // getProjectDetails();
     getUsers();
   }, []);
 
   // console.log(' Users data will be ', users);
-  // console.log(' Data to sent', userDetail);
 
   return (
     <SafeAreaView>
@@ -142,7 +133,6 @@ export default function Users({navigation}) {
         </Text>
       </Pressable>
       {users.map((d, i) => {
-        // console.log(' i am in map func', d);
         return (
           <View key={i}>
             <View
@@ -155,10 +145,10 @@ export default function Users({navigation}) {
               <Pressable
                 onPress={async () => {
                   setVisible(true);
-                  setUserDetail(d);
                   await navigation.navigate('UserDetails', {
-                    getdata: userDetail,
+                    getdata: d._id,
                   });
+                  // console.log(' i am in map func', d._id);
                 }}>
                 <Text style={{fontWeight: 'bold'}}> {d.username}</Text>
                 <Text>Role : {d.role}</Text>
@@ -233,8 +223,6 @@ const styles = StyleSheet.create({
   inputData: {
     borderColor: COLORS.grey,
     borderWidth: 1,
-    // width: '50%',
-    // marginTop: 10,
     paddingHorizontal: '40%',
     borderRadius: 5,
     marginBottom: 10,

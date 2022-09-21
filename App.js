@@ -2,12 +2,11 @@ import 'react-native-gesture-handler';
 
 import SplashScreen from 'react-native-splash-screen';
 import {Provider as PaperProvider} from 'react-native-paper';
-import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, Text} from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from './Components/Screens/Login';
-// import Home from './Components/Screens/Home';
 import BottomTab from './Components/Screens/BottomTab';
 import Contact from './Components/Screens/Contact';
 import SideBar from './Components/Screens/SideBar';
@@ -23,7 +22,6 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
-  // console.log('Routes Component', ContextValue.user);
 
   return (
     <ContextProvider>

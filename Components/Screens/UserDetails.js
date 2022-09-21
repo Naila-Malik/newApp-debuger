@@ -1,4 +1,4 @@
-import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Modal, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -15,6 +15,7 @@ export default function UserDetails({route, navigation}) {
   const [projectsList, setProjectsList] = useState({});
   const [projectsId, setProjectsId] = useState({});
   const [projectAssigned, setProjectAssigned] = useState({});
+  const [listOfUserProj, setListofUserProj] = useState({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [timesheetModalVisible, setTimesheetModalVisible] = useState(false);
@@ -31,10 +32,6 @@ export default function UserDetails({route, navigation}) {
     }
     return null;
   };
-
-  // const assignProj = {
-  //   projectsId =
-  // }
 
   const getProjectDetails = async () => {
     try {
@@ -59,28 +56,49 @@ export default function UserDetails({route, navigation}) {
   };
 
   const assignProject = async () => {
-    console.log('Get user id', getdata._id);
-    console.log('Get project id', projectsId);
+    // console.log('Get user id', getdata);
+    // console.log('Get project id', projectsId);
     try {
       const res = await axios.put(
         `http://192.168.5.5:5000/projects/assignproject/${projectsId}`,
-        {assignTo: getdata._id},
+        {assignTo: getdata},
       );
-      console.log('set assigned value to user', res.data.result.projectname);
-      res && setProjectAssigned(res.data.result.projectname);
+      // console.log('set assigned value to user', res.data.result);
+      // console.log('list of users for a project', res.data.result.assignTo);
+      res && setProjectAssigned(res.data.result.assignTo);
     } catch (error) {
       console.log(' Error while assigning project', error);
     }
   };
 
+  const getAssignTo = async () => {
+    try {
+      const res = await axios.get(
+        `http://192.168.5.5:5000/projects/${getdata}`,
+      );
+      var dummyProj = [];
+      const data = res.data.finduser.map(d => {
+        dummyProj.push({projectname: d.projectname});
+      });
+      data && setListofUserProj(dummyProj);
+    } catch (error) {
+      console.log(' Errors while get list of users projects', error);
+    }
+  };
+
   useEffect(() => {
     getProjectDetails();
+    getAssignTo();
+    return () => {
+      setListofUserProj(null);
+    };
   }, []);
 
   // console.log('dropdown value', value);
-  // console.log('Get user id', getdata._id);
+  // console.log('Get user id', getdata);
   // console.log('Get project id', projectsId);
-  console.log('List of Assigned Projects', projectAssigned);
+  // console.log('List of Assigned Projects', projectAssigned);
+  // console.log(' List of users project', listOfUserProj);
   return (
     <SafeAreaView>
       {/* actual UI of user details page */}
@@ -113,7 +131,14 @@ export default function UserDetails({route, navigation}) {
           Assigned Projects{' '}
         </Text>
       </Pressable>
-      {/* <Text>{projectAssigned}</Text> */}
+      <FlatList
+        data={listOfUserProj}
+        // key={listOfUserProj._id}
+        renderItem={({item}) => (
+          <Text style={styles.item}>{item.projectname}</Text>
+        )}
+        keyExtractor={item => item.id}
+      />
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setTimesheetModalVisible(!timesheetModalVisible)}>
@@ -299,7 +324,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.buttoncolor,
   },
   textStyle: {
-    color: 'white',
+    color: COLORS.textcolor,
     fontWeight: 'bold',
     textAlign: 'center',
     marginLeft: 5,
@@ -325,8 +350,6 @@ const styles = StyleSheet.create({
   inputData: {
     borderColor: COLORS.grey,
     borderWidth: 1,
-    // width: '50%',
-    // marginTop: 10,
     paddingHorizontal: '40%',
     borderRadius: 5,
     marginBottom: 10,
@@ -364,5 +387,10 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+  },
+  item: {
+    padding: 10,
+    marginVertical: 5,
+    marginHorizontal: 16,
   },
 });

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import COLORS from '../constants/Colors';
@@ -11,7 +11,12 @@ export default function Dashboard() {
     <SafeAreaView style={{flex: 1}}>
       <View style={{flexDirection: 'row', margin: 5}}>
         <View style={styles.iconStyle}>
-          <FontAwesome5 name="user-alt" size={35} color={COLORS.buttoncolor} />
+          <FontAwesome
+            name="user"
+            size={35}
+            color={COLORS.buttoncolor}
+            style={{marginLeft: 10, marginTop: 5}}
+          />
         </View>
         <View style={{marginLeft: 20}}>
           <Text style={styles.userName}>User Name </Text>

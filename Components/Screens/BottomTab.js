@@ -1,7 +1,8 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Home from './Home';
 import Contact from './Contact';
 import COLORS from './constants/Colors';
@@ -26,7 +27,7 @@ export default function BottomTab({navigation}) {
         component={Home}
         options={{
           tabBarIcon: () => (
-            <AntDesign name="home" size={28} color={COLORS.buttoncolor} />
+            <FontAwesome name="home" size={28} color={COLORS.buttoncolor} />
           ),
         }}></Tab.Screen>
       <Tab.Screen
@@ -34,7 +35,11 @@ export default function BottomTab({navigation}) {
         component={Contact}
         options={{
           tabBarIcon: () => (
-            <AntDesign name="contacts" size={28} color={COLORS.buttoncolor} />
+            <MaterialIcons
+              name="perm-contact-cal"
+              size={28}
+              color={COLORS.buttoncolor}
+            />
           ),
         }}></Tab.Screen>
     </Tab.Navigator>
