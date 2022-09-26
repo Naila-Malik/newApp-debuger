@@ -15,6 +15,11 @@ const Reducer = (state, action) => {
         user: null,
         error: true,
       };
+    case 'LOGOUT':
+      return {
+        user: null,
+        error: false,
+      };
     default:
       return state;
   }

@@ -27,25 +27,18 @@ const App = () => {
     <ContextProvider>
       <PaperProvider>
         <NavigationContainer>
-          {user ? (
-            <Stack.Navigator
-              initialRouteName="Login"
-              screenOptions={{headerShown: false}}>
-              <Stack.Screen name="Home" component={BottomTab} />
-              <Stack.Screen name="Contact" component={Contact} />
-              <Stack.Screen name="Drawer" component={SideBar} />
-            </Stack.Navigator>
-          ) : (
-            <Stack.Navigator
-              initialRouteName="Login"
-              screenOptions={{headerShown: false}}>
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{title: 'Login'}}
-              />
-            </Stack.Navigator>
-          )}
+          <Stack.Navigator
+            initialRouteName="Login"
+            screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Home" component={BottomTab} />
+            <Stack.Screen name="Contact" component={Contact} />
+            <Stack.Screen name="Drawer" component={SideBar} />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{title: 'Login'}}
+            />
+          </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
     </ContextProvider>

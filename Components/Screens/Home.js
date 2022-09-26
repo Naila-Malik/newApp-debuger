@@ -1,13 +1,12 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useContext} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import COLORS from './constants/Colors';
 
-const Tab = createBottomTabNavigator();
 const image = require('./images/avatar.png');
+
 export default function Home({navigation}) {
   return (
     <View style={styles.maincontainer}>
@@ -22,7 +21,7 @@ export default function Home({navigation}) {
           name="search"
           color="black"
           size={20}
-          onPress={() => console.log(' Search itmes')}
+          onPress={() => console.log(' Search button')}
         />
       </View>
       <View style={styles.textcontainer}>
@@ -36,7 +35,9 @@ export default function Home({navigation}) {
           Services
         </Text>
         <View style={styles.avatarContainer}>
-          <Image source={image} style={styles.avatar} />
+          <Pressable onPress={() => {}}>
+            <Image source={image} style={styles.avatar} />
+          </Pressable>
         </View>
       </View>
       <View style={styles.uiOuterContainer}>

@@ -1,8 +1,17 @@
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Button,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ContextValue} from '../ContextAPI/ContextCreate';
 import axios from 'axios';
+import COLORS from './constants/Colors';
 
+const image = require('./images/drawerUI.jpg');
 export default function Login({navigation}) {
   // const usernameRef = useRef();
   // const passwordRef = useRef();
@@ -20,8 +29,9 @@ export default function Login({navigation}) {
     password,
   };
 
-  const postData = async e => {
-    e.preventDefault();
+  const UserLogin = async () => {
+    setName('');
+    setPassword('');
     dispatch({type: 'LOGIN_START'});
     try {
       const response = await axios.post(
@@ -36,10 +46,13 @@ export default function Login({navigation}) {
     }
   };
 
+  // const UserLogout = () => {
+  //   dispatch({type: 'LOGOUT'});
+  //   console.log(' User Log Out');
+  // };
   const nameValidator = () => {
-    let rjxName = /^[a-zA-Z]+$/;
+    let rjxName = /^[0-9]+$/;
     let isValidate = rjxName.test(username);
-    // console.warn(isValidate);
     if (username == '') {
       setNameError('Please enter your name');
     } else if (isValidate) {
@@ -57,53 +70,82 @@ export default function Login({navigation}) {
       setPasswordError('');
     }
   };
-  // console.log('User will be ', user);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.textheader}> Login</Text>
-      <View style={styles.textcontainer}>
-        <Text style={styles.textbottom}>Username </Text>
-        <TextInput
-          style={styles.input}
-          onBlur={nameValidator}
-          // ref={usernameRef}
-          value={username}
-          placeholder="Enter username"
-          onChangeText={text => setName(text)}
-        />
-        <Text style={{color: 'red'}}> {nameError} </Text>
-        <Text style={styles.textbottom}>Password </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter password"
-          value={password}
-          minlength={4}
-          onBlur={passwordValidate}
-          secureTextEntry={true}
-          // ref={passwordRef}
-          onChangeText={text => setPassword(text)}
-        />
-        <Text style={{color: 'red'}}> {passwordError} </Text>
+    <ImageBackground
+      source={image}
+      style={{resizeMode: 'cover', height: '100%'}}>
+      <View style={{flex: 1}}>
+        <Text style={styles.header}> TimeSheet</Text>
       </View>
-      <View style={{marginTop: 50, width: '50%'}}>
-        <Button color="#ebab64" title="Login" onPress={postData} />
+      <View style={styles.container}>
+        <Text style={styles.textheader}> Login</Text>
+        <View style={styles.textcontainer}>
+          <Text style={styles.textbottom}>Username </Text>
+          <TextInput
+            style={styles.input}
+            onBlur={nameValidator}
+            // ref={usernameRef}
+            value={username}
+            placeholder="Enter username"
+            onChangeText={text => setName(text)}
+          />
+          <Text style={{color: 'red'}}> {nameError} </Text>
+          <Text style={styles.textbottom}>Password </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter password"
+            value={password}
+            minlength={4}
+            onBlur={passwordValidate}
+            secureTextEntry={true}
+            // ref={passwordRef}
+            onChangeText={text => setPassword(text)}
+          />
+          <Text style={{color: 'red'}}> {passwordError} </Text>
+        </View>
+        <View style={{marginTop: 50, width: '50%'}}>
+          <Button
+            color={COLORS.buttoncolor}
+            title="Login"
+            onPress={UserLogin}
+          />
+        </View>
+        {/* <View style={{marginTop: 10, width: '50%'}}>
+          <Button
+            color={COLORS.buttoncolor}
+            title="Logout"
+            onPress={UserLogout}
+          />
+        </View> */}
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 5,
     alignItems: 'center',
     alignContent: 'center',
-    // paddingTop: 50,
-    marginTop: '40%',
+    marginTop: '10%',
+    backgroundColor: COLORS.textcolor,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    borderTopColor: COLORS.buttoncolor,
+  },
+  header: {
+    color: COLORS.buttoncolor,
+    textAlign: 'center',
+    marginTop: 60,
+    fontFamily: 'sans-serif-medium',
+    fontSize: 25,
   },
   textheader: {
     textAlign: 'center',
     fontSize: 25,
     fontWeight: 'bold',
+    marginTop: '10%',
   },
   textcontainer: {
     borderTopColor: '#CCD1D1',

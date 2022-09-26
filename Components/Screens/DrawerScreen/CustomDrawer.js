@@ -1,15 +1,23 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import COLORS from '../constants/Colors';
+import {ContextValue} from '../../ContextAPI/ContextCreate';
 
 imgURL = require('../images/avatar.png');
 
 export default function CustomDrawer(props) {
+  const {dispatch, user} = useContext(ContextValue);
+
+  const UserLogout = () => {
+    dispatch({type: 'LOGOUT'});
+    props.navigation.navigate('Login');
+  };
+
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView
@@ -23,7 +31,7 @@ export default function CustomDrawer(props) {
       </DrawerContentScrollView>
       <Pressable
         style={[styles.button, styles.buttonStyle]}
-        onPress={() => console.log(' Loged Out')}>
+        onPress={UserLogout}>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <MaterialIcons
             name="exit-to-app"
