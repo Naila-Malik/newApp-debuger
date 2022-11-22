@@ -9,12 +9,13 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Foundation from 'react-native-vector-icons/Foundation';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SearchBar from 'react-native-dynamic-search-bar';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import axios from 'axios';
 import COLORS from '../constants/Colors';
+import baseURL from '../BaseUrl';
 
 export default function Projects({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,13 +25,13 @@ export default function Projects({navigation}) {
   const [projectDetail, setProjectDetail] = useState('');
   const [workingDays, setWorkingDays] = useState('');
   const [projects, setProjects] = useState([]);
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
+
+  const [reload, setReload] = useState(false);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-
-  const [userId, setuserId] = useState();
 
   const [isVisible, setVisible] = useState(false);
 
@@ -49,11 +50,12 @@ export default function Projects({navigation}) {
   const projectSubmitHandler = async () => {
     try {
       const res = await axios.post(
-        'http://192.168.5.5:5000/projects/addproject',
+        `${baseURL}/projects/addproject`,
         projectData,
       );
       // console.log(' responce of projects', res);
       res && setModalVisible(!modalVisible);
+      setReload(!reload);
       navigation.navigate('Projects');
     } catch (error) {
       console.log(' Errors while adding projects', error);
@@ -62,9 +64,7 @@ export default function Projects({navigation}) {
 
   const getProjectDetails = async () => {
     try {
-      const res = await axios.get(
-        'http://192.168.5.5:5000/projects/allprojects',
-      );
+      const res = await axios.get(`${baseURL}/projects/allprojects`);
 
       res && setProjects(res.data.get);
     } catch (error) {
@@ -79,7 +79,7 @@ export default function Projects({navigation}) {
   useEffect(() => {
     getProjectDetails();
     // getUsers();
-  }, []);
+  }, [reload]);
 
   // console.log(' Details of user project will be as', details);
   return (
@@ -124,20 +124,22 @@ export default function Projects({navigation}) {
                       borderWidth: 1,
                       borderRadius: 2,
                       paddingHorizontal: 10,
-                      marginLeft: 42,
+                      marginLeft: 50,
                     }}>
                     <Text style={styles.modalText}>
                       {' '}
                       {startDate.toLocaleDateString()}
                       {'     '}
                     </Text>
-                    <Foundation
-                      name="calendar"
-                      size={18}
+                    <MaterialCommunityIcons
+                      name="clock-outline"
+                      size={20}
                       onPress={() => setOpen(true)}
                     />
                     <DatePicker
                       modal
+                      mode="date"
+                      minimumDate={new Date()}
                       open={open}
                       date={startDate}
                       onConfirm={date => {
@@ -172,14 +174,16 @@ export default function Projects({navigation}) {
                       {endDate.toLocaleDateString()}
                       {'     '}
                     </Text>
-                    <Foundation
-                      name="calendar"
-                      size={18}
+                    <MaterialCommunityIcons
+                      name="clock-outline"
+                      size={20}
                       onPress={() => setOpen(true)}
                     />
                   </View>
                   <DatePicker
                     modal
+                    mode="date"
+                    minimumDate={new Date()}
                     open={open}
                     date={endDate}
                     onConfirm={date => {
@@ -194,7 +198,7 @@ export default function Projects({navigation}) {
                 </View>
               </View>
               <TextInput
-                style={styles.inputData}
+                style={styles.inputData1}
                 value={workingDays}
                 placeholder="Allocated working days"
                 onChangeText={text => setWorkingDays(text)}
@@ -368,7 +372,7 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   modalText: {
-    fontSize: 10,
+    fontSize: 12,
   },
   input: {
     borderColor: COLORS.grey,
@@ -382,9 +386,21 @@ const styles = StyleSheet.create({
     borderColor: COLORS.grey,
     borderWidth: 1,
     marginTop: 10,
-    paddingHorizontal: '40%',
+    paddingHorizontal: '20%',
+    borderRadius: 5,
+    marginBottom: 6,
+    width: '30%',
+    textAlign: 'center',
+  },
+  inputData1: {
+    borderColor: COLORS.grey,
+    borderWidth: 1,
+    marginTop: 10,
+    paddingHorizontal: '15%',
     borderRadius: 5,
     marginBottom: 5,
+    width: '20%',
+    textAlign: 'center',
   },
   inputText: {
     marginTop: 2,
@@ -392,8 +408,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.grey,
     borderRadius: 5,
-    paddingHorizontal: '40%',
+    paddingHorizontal: '20%',
+    width: '30%',
     padding: 20,
+    textAlign: 'center',
   },
   picker: {
     width: 200,

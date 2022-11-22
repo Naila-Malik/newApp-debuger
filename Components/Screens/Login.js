@@ -7,9 +7,11 @@ import {
   View,
 } from 'react-native';
 import React, {useContext, useEffect, useRef, useState} from 'react';
+import PushNotification from 'react-native-push-notification';
 import {ContextValue} from '../ContextAPI/ContextCreate';
 import axios from 'axios';
 import COLORS from './constants/Colors';
+import baseURL from './BaseUrl';
 
 const image = require('./images/drawerUI.jpg');
 export default function Login({navigation}) {
@@ -34,22 +36,17 @@ export default function Login({navigation}) {
     setPassword('');
     dispatch({type: 'LOGIN_START'});
     try {
-      const response = await axios.post(
-        'http://192.168.5.5:5000/auth/login',
-        postdata,
-      );
+      const response = await axios.post(`${baseURL}/auth/login`, postdata);
       dispatch({type: 'LOGIN_SUCCESS', payload: response.data});
       // console.log(' Data received in payload', response.data);
-      response && navigation.navigate('Home');
+      // response && navigation.navigate('Home');
+      response && navigation.navigate('Drawer');
     } catch (error) {
+      console.log(' Error while Login', error);
       dispatch({type: 'LOGIN_FAILURE'});
     }
   };
 
-  // const UserLogout = () => {
-  //   dispatch({type: 'LOGOUT'});
-  //   console.log(' User Log Out');
-  // };
   const nameValidator = () => {
     let rjxName = /^[0-9]+$/;
     let isValidate = rjxName.test(username);
@@ -70,6 +67,36 @@ export default function Login({navigation}) {
       setPasswordError('');
     }
   };
+
+  const createChannels = () => {
+    PushNotification.createChannel({
+      channelId: 'test1',
+      channelName: 'test-notify',
+    });
+  };
+
+  const handleNotifications = () => {
+    PushNotification.localNotification({
+      channelId: 'test1',
+      title: 'Attention Alert',
+      message: 'Please check your notifications to stay connected!',
+      color: COLORS.buttoncolor,
+    });
+  };
+  const getSchedualedNotification = () => {
+    PushNotification.localNotificationSchedule({
+      channelId: 'test1',
+      title: 'Break Alert',
+      message: 'Recess Time has been started at 1: 00 p:m',
+      date: new Date(Date.now() + 20 * 1000),
+      allowWhileIdle: true,
+      repeatType: 'day',
+    });
+  };
+
+  useEffect(() => {
+    createChannels();
+  }, []);
 
   return (
     <ImageBackground
@@ -108,16 +135,13 @@ export default function Login({navigation}) {
           <Button
             color={COLORS.buttoncolor}
             title="Login"
-            onPress={UserLogin}
+            onPress={() => {
+              UserLogin();
+              handleNotifications();
+              getSchedualedNotification();
+            }}
           />
         </View>
-        {/* <View style={{marginTop: 10, width: '50%'}}>
-          <Button
-            color={COLORS.buttoncolor}
-            title="Logout"
-            onPress={UserLogout}
-          />
-        </View> */}
       </View>
     </ImageBackground>
   );

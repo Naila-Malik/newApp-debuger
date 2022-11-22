@@ -13,9 +13,9 @@ imgURL = require('../images/avatar.png');
 export default function CustomDrawer(props) {
   const {dispatch, user} = useContext(ContextValue);
 
-  const UserLogout = () => {
+  const UserLogout = async () => {
+    await props.navigation.navigate('Login');
     dispatch({type: 'LOGOUT'});
-    props.navigation.navigate('Login');
   };
 
   return (
@@ -25,7 +25,10 @@ export default function CustomDrawer(props) {
         contentContainerStyle={{backgroundColor: COLORS.drawerColor, flex: 1}}>
         <View style={styles.iconContainer}>
           <Image source={imgURL} style={styles.image} />
-          <Text style={styles.textStyle}> User Name </Text>
+          <Text style={styles.textStyle}>
+            {' '}
+            {user && user.details.username}{' '}
+          </Text>
         </View>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
@@ -48,6 +51,7 @@ export default function CustomDrawer(props) {
 const styles = StyleSheet.create({
   iconContainer: {
     padding: 20,
+    flexDirection: 'row',
   },
   image: {
     height: 50,

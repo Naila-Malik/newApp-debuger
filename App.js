@@ -14,6 +14,10 @@ import {
   ContextProvider,
   ContextValue,
 } from './Components/ContextAPI/ContextCreate';
+import DashboardProject from './Components/Screens/UserDachbordScreens/DashboardProject';
+import DashboardTasks from './Components/Screens/UserDachbordScreens/DashboardTasks';
+import CalendarComponent from './Components/Screens/UserDachbordScreens/Calendar';
+import Notifications from './Components/Screens/UserDachbordScreens/Notifications';
 
 const Stack = createStackNavigator();
 
@@ -30,7 +34,14 @@ const App = () => {
           <Stack.Navigator
             initialRouteName="Login"
             screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Home" component={BottomTab} />
+            {/* <Stack.Screen name="Home" component={BottomTab} /> */}
+            <Stack.Screen
+              name="DashboardProject"
+              component={DashboardProject}
+            />
+            <Stack.Screen name="DashboardTasks" component={DashboardTasks} />
+            <Stack.Screen name="Calendar" component={CalendarComponent} />
+            <Stack.Screen name="Notifications" component={Notifications} />
             <Stack.Screen name="Contact" component={Contact} />
             <Stack.Screen name="Drawer" component={SideBar} />
             <Stack.Screen

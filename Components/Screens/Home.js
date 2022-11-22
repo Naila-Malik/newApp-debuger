@@ -3,6 +3,7 @@ import React, {useContext} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import COLORS from './constants/Colors';
 
 const image = require('./images/avatar.png');
@@ -41,7 +42,9 @@ export default function Home({navigation}) {
         </View>
       </View>
       <View style={styles.uiOuterContainer}>
-        <View style={styles.uiInnerContainer}>
+        <Pressable
+          style={styles.uiInnerContainer}
+          onPress={() => console.log(' Search button')}>
           <FontAwesome
             name="dashboard"
             size={60}
@@ -49,8 +52,10 @@ export default function Home({navigation}) {
             style={styles.iconstyle}
           />
           <Text style={styles.iconText}>Set Timesheet</Text>
-        </View>
-        <View style={styles.uiInnerContainer}>
+        </Pressable>
+        <Pressable
+          style={styles.uiInnerContainer}
+          onPress={() => console.log(' Search button')}>
           <FontAwesome
             name="group"
             size={50}
@@ -58,10 +63,12 @@ export default function Home({navigation}) {
             color={COLORS.buttoncolor}
           />
           <Text style={styles.iconText}>Add new user</Text>
-        </View>
+        </Pressable>
       </View>
       <View style={styles.uiOuterContainer}>
-        <View style={styles.uiInnerContainer}>
+        <Pressable
+          style={styles.uiInnerContainer}
+          onPress={() => console.log(' Search button')}>
           <FontAwesome
             name="tasks"
             size={60}
@@ -69,8 +76,10 @@ export default function Home({navigation}) {
             style={styles.iconstyle}
           />
           <Text style={styles.iconText}>New Task</Text>
-        </View>
-        <View style={styles.uiInnerContainer}>
+        </Pressable>
+        <Pressable
+          style={styles.uiInnerContainer}
+          onPress={() => console.log(' Search button')}>
           <MaterialCommunityIcons
             name="clipboard-list-outline"
             size={50}
@@ -78,10 +87,12 @@ export default function Home({navigation}) {
             color={COLORS.buttoncolor}
           />
           <Text style={styles.iconText}>New Project</Text>
-        </View>
+        </Pressable>
       </View>
       <View style={styles.uiOuterContainer}>
-        <View style={styles.uiInnerContainer}>
+        <Pressable
+          style={styles.uiInnerContainer}
+          onPress={() => console.log(' Search button')}>
           <MaterialCommunityIcons
             name="file-cancel-outline"
             size={60}
@@ -89,8 +100,8 @@ export default function Home({navigation}) {
             style={styles.iconstyle}
           />
           <Text style={styles.iconText}>Leave Types</Text>
-        </View>
-        <View style={styles.uiInnerContainer}>
+        </Pressable>
+        <Pressable style={styles.uiInnerContainer}>
           <MaterialCommunityIcons
             name="bell-check-outline"
             size={50}
@@ -98,7 +109,7 @@ export default function Home({navigation}) {
             color={COLORS.buttoncolor}
           />
           <Text style={styles.iconText}>Notifications</Text>
-        </View>
+        </Pressable>
       </View>
     </View>
   );

@@ -6,24 +6,34 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchBar from 'react-native-dynamic-search-bar';
 import DatePicker from 'react-native-date-picker';
-import Foundation from 'react-native-vector-icons/Foundation';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ContextValue} from '../../ContextAPI/ContextCreate';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 import COLORS from '../constants/Colors';
+import baseURL from '../BaseUrl';
 
 export default function DailyTasks({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [dateStart, setDateStart] = useState(new Date());
+  const [dateEnd, setDateEnd] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const [openStart, setOpenStart] = useState(false);
+  const [openEnd, setOpenEnd] = useState(false);
   const [details, setDetails] = useState([]);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDetail, setTaskDetail] = useState('');
   const [tasks, setTasks] = useState([]);
+
+  const {dispatch, user} = useContext(ContextValue);
+
+  const [reload, setReload] = useState(false);
 
   const [valuePicker, setValuePicker] = useState('Timesheet');
 
@@ -34,16 +44,15 @@ export default function DailyTasks({navigation}) {
     description: taskDetail,
     // selectProject: valuePicker,
     date: date,
+    addedby: user.details._id,
   };
   const taskSubmitHandler = async () => {
     try {
-      const res = await axios.post(
-        'http://192.168.5.5:5000/tasks/addtask',
-        taskData,
-      );
+      const res = await axios.post(`${baseURL}/tasks/addtask`, taskData);
       // console.log(' responce of tasks', res);
 
       res && setModalVisible(!modalVisible);
+      setReload(!reload);
       navigation.navigate('DailyTasks');
     } catch (error) {
       console.log(' Errors while adding tasks', error);
@@ -52,7 +61,7 @@ export default function DailyTasks({navigation}) {
 
   const getTasksDetails = async () => {
     try {
-      const res = await axios.get('http://192.168.5.5:5000/tasks/alltasks');
+      const res = await axios.get(`${baseURL}/tasks/alltasks`);
 
       // console.log(' Getting tasks', res.data.get);
       res && setTasks(res.data.get);
@@ -68,8 +77,9 @@ export default function DailyTasks({navigation}) {
 
   useEffect(() => {
     getTasksDetails();
-  }, []);
+  }, [reload]);
 
+  // console.log(' USers', user.details._id);
   return (
     <SafeAreaView>
       {/* Start of Modal add task */}
@@ -116,8 +126,8 @@ export default function DailyTasks({navigation}) {
                     {date.toLocaleDateString()}
                     {'     '}
                   </Text>
-                  <Foundation
-                    name="calendar"
+                  <FontAwesome
+                    name="calendar-check-o"
                     size={18}
                     onPress={() => setOpen(true)}
                   />
@@ -125,6 +135,8 @@ export default function DailyTasks({navigation}) {
               </View>
               <DatePicker
                 modal
+                mode="date"
+                minimumDate={new Date()}
                 open={open}
                 date={date}
                 onConfirm={date => {
@@ -168,12 +180,28 @@ export default function DailyTasks({navigation}) {
                   }}>
                   <Text style={styles.modalText}>
                     {' '}
-                    {date.toLocaleTimeString()}
+                    {dateStart.toLocaleTimeString()}
                     {'     '}
                   </Text>
                   <MaterialCommunityIcons
                     name="clock-outline"
-                    onPress={() => setOpen(true)}
+                    size={20}
+                    onPress={() => setOpenStart(true)}
+                  />
+                  <DatePicker
+                    modal
+                    mode="time"
+                    is24hourSource="device"
+                    open={openStart}
+                    date={dateStart}
+                    onConfirm={date => {
+                      setOpenStart(false);
+                      setDateStart(date);
+                      // console.log(' date picker', date);
+                    }}
+                    onCancel={() => {
+                      setOpenStart(false);
+                    }}
                   />
                 </View>
               </View>
@@ -200,24 +228,40 @@ export default function DailyTasks({navigation}) {
                   }}>
                   <Text style={styles.modalText}>
                     {' '}
-                    {date.toLocaleTimeString()}
+                    {dateEnd.toLocaleTimeString()}
                     {'     '}
                   </Text>
                   <MaterialCommunityIcons
                     name="clock-outline"
-                    onPress={() => setOpen(true)}
+                    size={20}
+                    onPress={() => setOpenEnd(true)}
+                  />
+                  <DatePicker
+                    modal
+                    mode="time"
+                    is24hourSource="device"
+                    open={openEnd}
+                    date={dateEnd}
+                    onConfirm={date => {
+                      setOpenEnd(false);
+                      setDateEnd(date);
+                      // console.log(' date picker', date);
+                    }}
+                    onCancel={() => {
+                      setOpenEnd(false);
+                    }}
                   />
                 </View>
               </View>
-              {/* </View> */}
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle} onPress={taskSubmitHandler}>
-                  Save
-                </Text>
-              </Pressable>
             </View>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle} onPress={taskSubmitHandler}>
+                Save
+              </Text>
+            </Pressable>
+            {/* </View> */}
           </View>
         </Modal>
       </View>
@@ -355,7 +399,7 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   modalText: {
-    fontSize: 10,
+    fontSize: 20,
   },
   input: {
     borderColor: COLORS.grey,

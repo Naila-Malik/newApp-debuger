@@ -1,11 +1,33 @@
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import COLORS from './constants/Colors';
+import axios from 'axios';
+import baseURL from './BaseUrl';
 
 const image = require('./images/avatar.png');
+
 const iconImage = require('./images/icon.jpg');
+
 export default function Contact({navigation}) {
+  const [users, setUsers] = useState([]);
+
+  const getUsers = async () => {
+    try {
+      const res = await axios.get(`${baseURL}/users/allusers`);
+      // console.log(' Data from users', res.data.users);
+      res && setUsers(res.data.users);
+    } catch (error) {
+      console.log(' Errors while getting data of users', error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  // console.log(' Users data will be ', users);
+
   return (
     <View style={styles.maincontainer}>
       <View style={styles.container}>
@@ -37,24 +59,15 @@ export default function Contact({navigation}) {
         </View>
       </View>
       <View style={styles.body}>
-        <FlatList
-          data={[
-            {key: 'Android'},
-            {key: 'iOS'},
-            {key: 'Java'},
-            {key: 'Swift'},
-            {key: 'Php'},
-            {key: 'Hadoop'},
-            {key: 'Sap'},
-            {key: 'Python'},
-          ]}
-          renderItem={({item}) => (
-            <View style={{flexDirection: 'row'}}>
-              <Image source={iconImage} style={styles.bodyUi} />
-              <Text style={styles.item}>{item.key}</Text>
-            </View>
-          )}
-        />
+        {users &&
+          users.map((d, i) => {
+            return (
+              <View style={{flexDirection: 'row'}}>
+                <Image source={iconImage} style={styles.bodyUi} />
+                <Text style={styles.item}>{d.username}</Text>
+              </View>
+            );
+          })}
       </View>
     </View>
   );

@@ -30,6 +30,7 @@ export default function BottomTab({navigation}) {
             <FontAwesome name="home" size={28} color={COLORS.buttoncolor} />
           ),
         }}></Tab.Screen>
+
       <Tab.Screen
         name="Contact"
         component={Contact}

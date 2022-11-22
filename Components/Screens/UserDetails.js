@@ -5,6 +5,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import SearchBar from 'react-native-dynamic-search-bar';
 import COLORS from './constants/Colors';
 import axios from 'axios';
+import baseURL from './BaseUrl';
 
 export default function UserDetails({route, navigation}) {
   const {getdata} = route.params;
@@ -35,9 +36,7 @@ export default function UserDetails({route, navigation}) {
 
   const getProjectDetails = async () => {
     try {
-      const res = await axios.get(
-        'http://192.168.5.5:5000/projects/allprojects',
-      );
+      const res = await axios.get(`${baseURL}/projects/allprojects`);
 
       // get data from projects and extract project name only by map method
       //new array will be generated that have only name of projects
@@ -60,7 +59,7 @@ export default function UserDetails({route, navigation}) {
     // console.log('Get project id', projectsId);
     try {
       const res = await axios.put(
-        `http://192.168.5.5:5000/projects/assignproject/${projectsId}`,
+        `${baseURL}/projects/assignproject/${projectsId}`,
         {assignTo: getdata},
       );
       // console.log('set assigned value to user', res.data.result);
@@ -73,9 +72,7 @@ export default function UserDetails({route, navigation}) {
 
   const getAssignTo = async () => {
     try {
-      const res = await axios.get(
-        `http://192.168.5.5:5000/projects/${getdata}`,
-      );
+      const res = await axios.get(`${baseURL}/projects/${getdata}`);
       var dummyProj = [];
       const data = res.data.finduser.map(d => {
         dummyProj.push({projectname: d.projectname});

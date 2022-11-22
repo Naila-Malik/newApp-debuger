@@ -11,6 +11,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SearchBar from 'react-native-dynamic-search-bar';
 import axios from 'axios';
 import COLORS from '../constants/Colors';
+import baseURL from '../BaseUrl';
 
 export default function Users({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,24 +19,24 @@ export default function Users({navigation}) {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
 
+  const [reload, setReload] = useState(false);
+
   const [users, setUsers] = useState([]);
 
   const [isVisible, setVisible] = useState(false);
 
   var userData = {
-    userName,
+    username: userName,
     password,
     role,
   };
 
   const userSubmitHandler = async () => {
     try {
-      const res = await axios.post(
-        'http://192.168.5.5:5000/auth/register',
-        userData,
-      );
+      const res = await axios.post(`${baseURL}/auth/register`, userData);
       // console.log(' responce of projects', res.data.newUser);
       res && setModalVisible(!modalVisible);
+      setReload(!reload);
       navigation.navigate('Users');
     } catch (error) {
       console.log(' Errors while adding projects', error);
@@ -44,7 +45,7 @@ export default function Users({navigation}) {
 
   const getUsers = async () => {
     try {
-      const res = await axios.get('http://192.168.5.5:5000/users/allusers');
+      const res = await axios.get(`${baseURL}/users/allusers`);
       // console.log(' Data from users', res.data.users);
       res && setUsers(res.data.users);
     } catch (error) {
@@ -54,7 +55,7 @@ export default function Users({navigation}) {
 
   useEffect(() => {
     getUsers();
-  }, []);
+  }, [reload]);
 
   // console.log(' Users data will be ', users);
 
@@ -223,9 +224,13 @@ const styles = StyleSheet.create({
   inputData: {
     borderColor: COLORS.grey,
     borderWidth: 1,
-    paddingHorizontal: '40%',
+    marginTop: 10,
+    paddingHorizontal: '20%',
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 5,
+    width: '30%',
+    textAlign: 'center',
+    marginLeft: 5,
   },
   picker: {
     width: 200,
